@@ -1,1 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>実質時給かんたん診断 | みぎうでさん</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
 
+  :root{
+    --bg: #FAF6F0;
+    --card: #FFFFFF;
+    --indigo: #33415C;
+    --indigo-deep: #212D42;
+    --coral: #E2704F;
+    --coral-soft: #F7E3DA;
+    --text: #2B3142;
+    --text-muted: #7B8296;
+    --border: #EAE3D8;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--text);
+    display:flex;
+    justify-content:center;
+    padding: 40px 16px 64px;
+    min-height: 100vh;
+  }
+  .wrap{ width:100%; max-width: 480px; }
+
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    letter-spacing: .04em;
+  }
+  .eyebrow .dot{
+    width:6px;height:6px;border-radius:50%;
+    background: var(--coral);
+    display:inline-block;
+  }
+
+  h1{
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.5;
+    color: var(--indigo-deep);
+    margin: 0 0 8px;
+  }
+  h1 span{ color: var(--coral); }
+
+  .lead{
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin: 0 0 28px;
+  }
+
+  .card{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px 24px;
+    box-shadow: 0 12px 32px -20px rgba(33,45,66,0.25);
+  }
+
+  .field{ margin-bottom: 20px; }
+  .field:last-of-type{ margin-bottom: 0; }
+  label{
+    display:block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--indigo);
+    margin-bottom: 8px;
+  }
+  .input-row{
+    display:flex;
+    align-items:center;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0 14px;
+    background: #FCFAF6;
+    transition: border-color .15s ease;
+  }
+  .input-row:focus-within{
+    border-color: var(--coral);
+  }
+  .input-row input{
+    flex:1;
+    border:none;
+    background: transparent;
+    padding: 12px 6px;
+    font-size: 16px;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--text);
+    outline: none;
+    min-width: 0;
+  }
+  .input-row .unit{
+    font-size: 13px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  button.calc{
+    width:100%;
+    margin-top: 24px;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: var(--indigo-deep);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer;
+    transition: background .15s ease, transform .1s ease;
+  }
+  button.calc:hover{ background: var(--indigo); }
+  button.calc:active{ transform: scale(0.99); }
+
+  .result{
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px dashed var(--border);
+    display:none;
+  }
+  .result.show{ display:block; animation: fadeUp .4s ease; }
+  @keyframes fadeUp{
+    from{ opacity:0; transform: translateY(6px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .result-label{
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .result-number{
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 700;
+    color: var(--coral);
+    font-size: 42px;
+    line-height: 1;
+    display:flex;
+    align-items:baseline;
+    gap:6px;
+  }
+  .result-number .yen{ font-size: 20px; }
+  .result-number .per-h{ font-size: 15px; color: var(--text-muted); font-family:'Noto Sans JP',sans-serif; font-weight:500; }
+
+  .comment{
+    margin-top: 14px;
+    background: var(--coral-soft);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    line-height: 1.9;
+    color: var(--indigo-deep);
+  }
+  .comment b{ color: var(--coral); }
+
+  .cta{
+    display:block;
+    text-align:center;
+    margin-top: 20px;
+    padding: 13px;
+    border-radius: 10px;
+    border: 1.5px solid var(--indigo-deep);
+    color: var(--indigo-deep);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background .15s ease, color .15s ease;
+  }
+  .cta:hover{ background: var(--indigo-deep); color:#fff; }
+
+  .foot{
+    text-align:center;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 22px;
+    line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow"><span class="dot"></span>みぎうでさんの、経営改善の伴侶</div>
+  <h1>あなたの<span>「実質時給」</span>、<br>知っていますか？</h1>
+  <p class="lead">3つだけ、数字を教えてください。あなたが今、本当はいくらで働いているのか、その場でお伝えします。</p>
+
+  <div class="card">
+    <div class="field">
+      <label for="revenue">今月の月商</label>
+      <div class="input-row">
+        <input type="number" id="revenue" inputmode="numeric" placeholder="例：800,000">
+        <span class="unit">円 / 月</span>
+      </div>
+    </div>
+    <div class="field">
+      <label for="salary">ご自身の月間報酬(生活費として使っている額)</label>
+      <div class="input-row">
+        <input type="number" id="salary" inputmode="numeric" placeholder="例：300,000">
+        <span class="unit">円 / 月</span>
+      </div>
+    </div>
+    <div class="field">
+      <label for="hours">1ヶ月の総労働時間</label>
+      <div class="input-row">
+        <input type="number" id="hours" inputmode="numeric" placeholder="例：220">
+        <span class="unit">時間 / 月</span>
+      </div>
+    </div>
+
+    <button class="calc" onclick="calc()">実質時給を見る</button>
+
+    <div class="result" id="result">
+      <div class="result-label">あなたの実質時給は</div>
+      <div class="result-number"><span class="yen">¥</span><span id="wage">0</span><span class="per-h">/ 時間</span></div>
+      <div class="comment" id="comment"></div>
+    </div>
+  </div>
+
+  <a class="cta" href="#" id="ctaLink">みぎうでさんに、無料で相談してみる</a>
+
+  <p class="foot">この診断は簡易版です。より正確な数字と、そこからの改善プランは<br>「経営健康診断」で一緒に作っていきます。</p>
+</div>
+
+<script>
+function calc(){
+  const salary = parseFloat(document.getElementById('salary').value) || 0;
+  const hours = parseFloat(document.getElementById('hours').value) || 0;
+  const resultBox = document.getElementById('result');
+  const wageEl = document.getElementById('wage');
+  const commentEl = document.getElementById('comment');
+
+  if(hours <= 0){
+    wageEl.textContent = '—';
+    commentEl.innerHTML = '労働時間を入力してください。';
+    resultBox.classList.add('show');
+    return;
+  }
+
+  const wage = Math.round(salary / hours);
+  wageEl.textContent = wage.toLocaleString();
+
+  let comment = '';
+  if(wage < 1500){
+    comment = '正直に言うと、これは<b>厳しい水準</b>です。日々の業務のどこかに、時間を大きく奪っている作業があるかもしれません。一度、一緒に見直してみませんか。';
+  } else if(wage < 3000){
+    comment = 'まずまずですが、まだ<b>伸びしろがある</b>数字です。ノンコア業務(経理・事務作業など)を整理するだけで、この数字は変わる可能性があります。';
+  } else {
+    comment = 'しっかり稼げている水準です。ここからは、<b>この時間をどこに再投資するか</b>が次のテーマになりそうです。';
+  }
+  commentEl.innerHTML = comment;
+  resultBox.classList.add('show');
+}
+</script>
+</body>
+</html>
