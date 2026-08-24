@@ -125,6 +125,7 @@
   }
   button.calc:hover{ background: var(--indigo); }
   button.calc:active{ transform: scale(0.99); }
+  button.calc:disabled{ opacity: 0.6; cursor: default; }
 
   .result{
     margin-top: 24px;
@@ -220,7 +221,7 @@
       </div>
     </div>
 
-    <button class="calc" onclick="calc()">実質時給を見る</button>
+    <button class="calc" id="calcBtn" onclick="calc()">実質時給を見る</button>
 
     <div class="result" id="result">
       <div class="result-label">あなたの実質時給は</div>
@@ -235,12 +236,17 @@
 </div>
 
 <script>
+// ここにGASウェブアプリのURLを貼る(デプロイ後に発行されるURL)
+const GAS_ENDPOINT_URL = 'ここにデプロイ後のGAS URLを貼ってください';
+
 function calc(){
+  const revenue = parseFloat(document.getElementById('revenue').value) || 0;
   const salary = parseFloat(document.getElementById('salary').value) || 0;
   const hours = parseFloat(document.getElementById('hours').value) || 0;
   const resultBox = document.getElementById('result');
   const wageEl = document.getElementById('wage');
   const commentEl = document.getElementById('comment');
+  const btn = document.getElementById('calcBtn');
 
   if(hours <= 0){
     wageEl.textContent = '—';
@@ -262,6 +268,24 @@ function calc(){
   }
   commentEl.innerHTML = comment;
   resultBox.classList.add('show');
+
+  // データをスプレッドシートに送信(失敗しても画面表示には影響させない)
+  sendToSheet({ revenue, salary, hours, wage });
+}
+
+function sendToSheet(data){
+  if(!GAS_ENDPOINT_URL || GAS_ENDPOINT_URL.indexOf('ここに') === 0){
+    console.warn('GASのURLが未設定です。データは送信されていません。');
+    return;
+  }
+  fetch(GAS_ENDPOINT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // CORSのプリフライトを避けるための指定
+    body: JSON.stringify(data)
+  }).catch(function(err){
+    // 送信に失敗しても、ユーザー側の診断結果表示は妨げない
+    console.warn('データ送信に失敗しました', err);
+  });
 }
 </script>
 </body>
