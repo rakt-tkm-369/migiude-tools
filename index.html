@@ -168,20 +168,41 @@
   }
   .comment b{ color: var(--coral); }
 
+  .next-step{
+    margin-top: 20px;
+    text-align: center;
+    animation: fadeUp .5s ease .15s both;
+  }
+  .next-step-lead{
+    font-size: 13px;
+    color: var(--indigo-deep);
+    font-weight: 500;
+    margin: 0 0 12px;
+  }
+
   .cta{
     display:block;
     text-align:center;
-    margin-top: 20px;
-    padding: 13px;
+    padding: 15px;
     border-radius: 10px;
-    border: 1.5px solid var(--indigo-deep);
-    color: var(--indigo-deep);
-    font-size: 14px;
+    border: none;
+    background: var(--coral);
+    color: #fff;
+    font-size: 15px;
     font-weight: 700;
     text-decoration: none;
-    transition: background .15s ease, color .15s ease;
+    box-shadow: 0 10px 24px -10px rgba(226,112,79,0.6);
+    transition: transform .15s ease, box-shadow .15s ease;
+    animation: pulse 1.8s ease-in-out 1.2s 2;
   }
-  .cta:hover{ background: var(--indigo-deep); color:#fff; }
+  .cta:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px -10px rgba(226,112,79,0.7);
+  }
+  @keyframes pulse{
+    0%, 100%{ box-shadow: 0 10px 24px -10px rgba(226,112,79,0.6); }
+    50%{ box-shadow: 0 10px 30px -6px rgba(226,112,79,0.9); }
+  }
 
   .foot{
     text-align:center;
@@ -227,10 +248,15 @@
       <div class="result-label">あなたの実質時給は</div>
       <div class="result-number"><span class="yen">¥</span><span id="wage">0</span><span class="per-h">/ 時間</span></div>
       <div class="comment" id="comment"></div>
+
+      <div class="next-step">
+        <p class="next-step-lead">この数字、実はまだ伸びしろがあるかもしれません。</p>
+        <a class="cta" href="https://timerex.net/s/rakt.tkm_554b/bbbdebdb" id="ctaLink" target="_blank" rel="noopener">
+          みぎうでさんに、軽く相談してみる
+        </a>
+      </div>
     </div>
   </div>
-
-  <a class="cta" href="https://timerex.net/s/rakt.tkm_554b/bbbdebdb" id="ctaLink" target="_blank" rel="noopener">みぎうでさんに、無料で相談してみる</a>
 
   <p class="foot">この診断は簡易版です。より正確な数字と、そこからの改善プランは<br>「経営健康診断」で一緒に作っていきます。</p>
 </div>
